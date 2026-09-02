@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ゴルフスイング タイムシフトカメラ</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background-color: #121212;
+      color: #ffffff;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      justify-content: space-between;
+    }
+    .video-container {
+      width: 100%;
+      max-width: 600px;
+      position: relative;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    video, canvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: scaleX(-1); /* インカメラ用（鏡像表示） */
+    }
+    video {
+      display: none; /* 非表示（Canvasで遅延描画するため） */
+    }
+    .controls {
+      width: 100%;
+      max-width: 600px;
+      padding: 15px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background: #1e1e1e;
+    }
+    label, select, button {
+      font-size: 14px;
+      color: #fff;
+    }
+    select, button {
+      padding: 8px 12px;
+      background: #333;
+      border: 1px solid #555;
+      border-radius: 4px;
+    }
+    /* 広告枠（画面最下部） */
+    .ad-area {
+      width: 100%;
+      max-width: 600px;
+      padding: 10px;
+      text-align: center;
+      border-top: 1px solid #333;
+      font-size: 12px;
+    }
+    .ad-area a {
+      color: #4da6ff;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- カメラ映像描画エリア -->
+  <div class="video-container">
+    <video id="webcam" autoplay playsinline muted></video>
+    <canvas id="outputCanvas"></canvas>
+  </div>
+
+  <!-- 操作系エリア -->
+  <div class="controls">
+    <div>
+      <label for="delaySelect">遅延時間: </label>
+      <select id="delaySelect">
+        <option value="5">5秒前</option>
+        <option value="10" selected>10秒前</option>
+        <option value="15">15秒前</option>
+      </select>
+    </div>
+    <button id="toggleBtn">カメラ停止</button>
+  </div>
+
+  <!-- PR広告枠（UXを阻害しない最下部配置） -->
+  <div class="ad-area">
+    <span style="color: #888;">【PR】</span> 
+    <a href="https://www.amazon.co.jp/" target="_blank" rel="noopener">
+      📷 練習場で倒れない！スマホ三脚を見る (Amazon)
+    </a>
+  </div>
+
+  <script>
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('outputCanvas');
+    const ctx = canvas.getContext('2d');
+    const delaySelect = document.getElementById('delaySelect');
+    const toggleBtn = document.getElementById('toggleBtn');
+
+    let buffer = [];
+    let isRunning = true;
+    let delaySeconds = parseInt(delaySelect.value, 10);
+    const fps = 30; // 目安のフレームレート
+
+    // カメラ起動
+    async function initCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" }, // インカメラ
+          audio: false
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        alert('カメラへのアクセスが拒否されたか、対応していません。');
+      }
+    }
+
+    video.addEventListener('loadedmetadata', () => {
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+      requestAnimationFrame(processFrame);
+    });
+
+    // フレーム処理ループ
+    function processFrame() {
+      if (isRunning) {
+        // 現在の画面を一時キャンバスに記録
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+        const tempCtx = tempCanvas.getContext('2d');
+        tempCtx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        // バッファに保存
+        buffer.push(tempCanvas);
+
+        // 設定した遅延秒数分（フレーム数）が溜まったら古いフレームを描画
+        const maxFrames = delaySeconds * fps;
+        if (buffer.length > maxFrames) {
+          const delayedFrame = buffer.shift();
+          ctx.drawImage(delayedFrame, 0, 0);
+        }
+      }
+      requestAnimationFrame(processFrame);
+    }
+
+    // 遅延時間の変更
+    delaySelect.addEventListener('change', (e) => {
+      delaySeconds = parseInt(e.target.value, 10);
+      buffer = []; // バッファリセット
+    });
+
+    // 停止・再開
+    toggleBtn.addEventListener('click', () => {
+      isRunning = !isRunning;
+      toggleBtn.textContent = isRunning ? 'カメラ停止' : 'カメラ再開';
+    });
+
+    initCamera();
+  </script>
+</body>
+</html>
