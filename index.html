@@ -165,7 +165,7 @@
   .delay-choices{
     flex: 1;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
     background: rgba(15, 20, 15, 0.6);
     backdrop-filter: blur(10px);
@@ -268,7 +268,6 @@
         <div class="delay-choices" id="delayChoices">
           <button data-delay="5">5秒</button>
           <button data-delay="10" class="active">10秒</button>
-          <button data-delay="15">15秒</button>
         </div>
       </div>
 
@@ -467,7 +466,7 @@
       const bitmap = await createImageBitmap(video);
       buffer.push({ t: performance.now(), bitmap });
 
-      const maxAgeMs = (delaySeconds + 2) * 1000 + 3000; // 少し余裕を持って保持
+      const maxAgeMs = (delaySeconds + 1) * 1000 + 1500; // 少し余裕を持って保持
       const cutoff = performance.now() - maxAgeMs;
       while (buffer.length && buffer[0].t < cutoff) {
         const f = buffer.shift();
