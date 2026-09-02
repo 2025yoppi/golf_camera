@@ -305,6 +305,8 @@
   const stage = $("stage");
   const canvas = $("canvas");
   const ctx = canvas.getContext("2d", { alpha: false });
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
   const placeholder = $("placeholder");
   const delayBadge = $("delayBadge");
   const bufferBar = $("bufferBar");
@@ -330,7 +332,7 @@
 
   // リングバッファ: { t: timestamp(ms), bitmap: ImageBitmap }
   const buffer = [];
-  const CAPTURE_FPS = 15;
+  const CAPTURE_FPS = 24;
   const CAPTURE_INTERVAL = 1000 / CAPTURE_FPS;
 
   function showError(msg) {
@@ -372,6 +374,7 @@
     startBtn.disabled = true;
 
     const constraintsList = [
+      { video: { facingMode: { ideal: facingMode }, width: { ideal: 1920 }, height: { ideal: 1080 }, frameRate: { ideal: 30 } }, audio: false },
       { video: { facingMode: { ideal: facingMode }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
       { video: { facingMode: facingMode }, audio: false },
       { video: true, audio: false }
