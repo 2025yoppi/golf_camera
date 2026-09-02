@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+<title>ゴルフ タイムシフトカメラ</title>
+<meta name="description" content="スイングを数秒後に自分で見返せる、ゴルフ練習用の遅延再生カメラ。">
+
+<!-- PWA -->
+<meta name="theme-color" content="#10140F">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="タイムシフト">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2310140F'/%3E%3Ccircle cx='32' cy='32' r='19' fill='%23F4EDE0'/%3E%3Ccircle cx='25' cy='24' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='36' cy='22' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='40' cy='32' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='30' cy='40' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='22' cy='34' r='2.4' fill='%23C8BFA8'/%3E%3Cpath d='M32 12v-6M27 6h10' stroke='%23D98B3F' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2310140F'/%3E%3Ccircle cx='32' cy='32' r='19' fill='%23F4EDE0'/%3E%3Ccircle cx='25' cy='24' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='36' cy='22' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='40' cy='32' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='30' cy='40' r='2.4' fill='%23C8BFA8'/%3E%3Ccircle cx='22' cy='34' r='2.4' fill='%23C8BFA8'/%3E%3C/svg%3E">
+<link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22%E3%82%B4%E3%83%AB%E3%83%95%20%E3%82%BF%E3%82%A4%E3%83%A0%E3%82%B7%E3%83%95%E3%83%88%E3%82%AB%E3%83%A1%E3%83%A9%22%2C%22short_name%22%3A%22TimeShift%20Golf%22%2C%22start_url%22%3A%22.%2Findex.html%22%2C%22scope%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22any%22%2C%22background_color%22%3A%22%2310140F%22%2C%22theme_color%22%3A%22%2310140F%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%2C%253Csvg%2520xmlns%253D%2527http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2527%2520viewBox%253D%25270%25200%252064%252064%2527%253E%253Crect%2520width%253D%252764%2527%2520height%253D%252764%2527%2520rx%253D%252714%2527%2520fill%253D%2527%252310140F%2527%252F%253E%253Ccircle%2520cx%253D%252732%2527%2520cy%253D%252732%2527%2520r%253D%252719%2527%2520fill%253D%2527%2523F4EDE0%2527%252F%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22192x192%20512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%22%7D%5D%7D">
+
+<style>
+  :root{
+    --bg: #10140F;
+    --bg-raised: #171D16;
+    --line: #2A332A;
+    --turf: #4C7A5C;
+    --turf-bright: #6FA47D;
+    --flag: #D98B3F;
+    --flag-dim: #8A5A2A;
+    --ball: #F4EDE0;
+    --ink: #EDEAE0;
+    --ink-dim: #9AA398;
+    --danger: #C24E3F;
+    --radius: 16px;
+    color-scheme: dark;
+  }
+
+  *{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  html, body{
+    height: 100%;
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", Roboto, sans-serif;
+    overscroll-behavior: none;
+  }
+
+  body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  }
+
+  header{
+    padding: 18px 20px 10px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  header h1{
+    margin: 0;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+  }
+  header h1 .dot{ color: var(--flag); }
+
+  header .status{
+    font-size: 12px;
+    color: var(--ink-dim);
+    white-space: nowrap;
+  }
+  header .status.live{ color: var(--turf-bright); }
+  header .status.rec::before{
+    content: "";
+    display: inline-block;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--danger);
+    margin-right: 6px;
+    animation: pulse 1.4s ease-in-out infinite;
+    vertical-align: middle;
+  }
+
+  @keyframes pulse{
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.25; }
+  }
+
+  main{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 14px;
+    min-height: 0;
+  }
+
+  .stage{
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #05080B;
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .stage canvas{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  .placeholder{
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 24px;
+    text-align: center;
+    color: var(--ink-dim);
+  }
+  .placeholder svg{ width: 56px; height: 56px; opacity: 0.6; }
+  .placeholder p{ margin: 0; font-size: 14px; line-height: 1.6; max-width: 30ch; }
+  .placeholder.hidden{ display: none; }
+
+  .delay-badge{
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 12px;
+    background: rgba(16, 20, 15, 0.72);
+    backdrop-filter: blur(6px);
+    border: 1px solid var(--line);
+    border-radius: 100px;
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--ball);
+    letter-spacing: 0.02em;
+    transition: opacity 0.2s;
+  }
+  .delay-badge.hidden{ opacity: 0; }
+
+  .buffer-bar{
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    height: 3px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.08);
+    overflow: hidden;
+    transition: opacity 0.2s;
+  }
+  .buffer-bar.hidden{ opacity: 0; }
+  .buffer-bar > i{
+    display: block;
+    height: 100%;
+    width: 0%;
+    background: var(--flag);
+    transition: width 0.1s linear;
+  }
+
+  .panel{
+    padding: 16px 6px calc(20px + env(safe-area-inset-bottom));
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .delay-row{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .delay-row .label{
+    font-size: 12px;
+    color: var(--ink-dim);
+    width: 62px;
+    flex-shrink: 0;
+  }
+  .delay-choices{
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 4px;
+  }
+  .delay-choices button{
+    appearance: none;
+    border: none;
+    background: transparent;
+    color: var(--ink-dim);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 9px 0;
+    border-radius: 9px;
+    font-variant-numeric: tabular-nums;
+    transition: background 0.15s, color 0.15s;
+  }
+  .delay-choices button.active{
+    background: var(--turf);
+    color: #fff;
+  }
+
+  .controls{
+    display: flex;
+    gap: 10px;
+  }
+
+  button{ font-family: inherit; cursor: pointer; }
+  button:focus-visible{ outline: 2px solid var(--flag); outline-offset: 2px; }
+
+  .btn{
+    flex: 1;
+    border: none;
+    border-radius: 14px;
+    padding: 15px 12px;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: transform 0.1s, opacity 0.15s;
+  }
+  .btn:active{ transform: scale(0.97); }
+  .btn svg{ width: 18px; height: 18px; }
+
+  .btn-start{ background: var(--turf); color: #fff; }
+  .btn-stop{ background: var(--danger); color: #fff; }
+  .btn-flip{
+    flex: 0 0 52px;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    color: var(--ink);
+  }
+  .btn[disabled]{ opacity: 0.4; pointer-events: none; }
+
+  .error-toast{
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    background: #2A1512;
+    border: 1px solid #5A2A22;
+    color: #F3D9D2;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.5;
+    transform: translateY(140%);
+    transition: transform 0.25s ease;
+    z-index: 20;
+  }
+  .error-toast.show{ transform: translateY(0); }
+
+  @media (min-width: 640px){
+    main{ padding: 0 24px; }
+    .panel{ max-width: 480px; margin: 0 auto; width: 100%; }
+    header{ padding: 20px 24px 10px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>タイムシフト<span class="dot">・</span>カメラ</h1>
+  <span class="status" id="status">停止中</span>
+</header>
+
+<main>
+  <div class="stage" id="stage">
+    <canvas id="canvas"></canvas>
+    <div class="placeholder" id="placeholder">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+        <path d="M4 8a2 2 0 0 1 2-2h1.2a1 1 0 0 0 .87-.5l.6-1a1 1 0 0 1 .87-.5h4.92a1 1 0 0 1 .87.5l.6 1a1 1 0 0 0 .87.5H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z"/>
+        <circle cx="12" cy="13" r="3.6"/>
+      </svg>
+      <p>「カメラ開始」をタップすると、設定した秒数だけ遅れてスイングが再生されます。ひとりでも自分のフォームを確認できます。</p>
+    </div>
+    <div class="delay-badge hidden" id="delayBadge">10秒 遅延</div>
+    <div class="buffer-bar hidden" id="bufferBar"><i id="bufferFill"></i></div>
+  </div>
+
+  <div class="panel">
+    <div class="delay-row">
+      <span class="label">遅延時間</span>
+      <div class="delay-choices" id="delayChoices">
+        <button data-delay="5">5秒</button>
+        <button data-delay="10" class="active">10秒</button>
+        <button data-delay="15">15秒</button>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button class="btn btn-flip" id="flipBtn" title="前後カメラ切替" aria-label="前後カメラ切替">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M17 2.1l4 4-4 4"/><path d="M3 12.6v-2a4 4 0 0 1 4-4h14"/>
+          <path d="M7 21.9l-4-4 4-4"/><path d="M21 11.4v2a4 4 0 0 1-4 4H3"/>
+        </svg>
+      </button>
+      <button class="btn btn-start" id="startBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/></svg>
+        カメラ開始
+      </button>
+      <button class="btn btn-stop" id="stopBtn" disabled style="display:none;">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+        停止
+      </button>
+    </div>
+  </div>
+</main>
+
+<div class="error-toast" id="errorToast"></div>
+
+<script>
+(() => {
+  "use strict";
+
+  const $ = (id) => document.getElementById(id);
+  const stage = $("stage");
+  const canvas = $("canvas");
+  const ctx = canvas.getContext("2d", { alpha: false });
+  const placeholder = $("placeholder");
+  const delayBadge = $("delayBadge");
+  const bufferBar = $("bufferBar");
+  const bufferFill = $("bufferFill");
+  const statusEl = $("status");
+  const startBtn = $("startBtn");
+  const stopBtn = $("stopBtn");
+  const flipBtn = $("flipBtn");
+  const delayChoices = $("delayChoices");
+  const errorToast = $("errorToast");
+
+  const video = document.createElement("video");
+  video.setAttribute("playsinline", "");
+  video.setAttribute("muted", "");
+  video.muted = true;
+
+  let stream = null;
+  let facingMode = "user";        // インカメラ優先
+  let delaySeconds = 10;
+  let running = false;
+  let captureTimer = null;
+  let rafId = null;
+
+  // リングバッファ: { t: timestamp(ms), bitmap: ImageBitmap }
+  const buffer = [];
+  const CAPTURE_FPS = 15;
+  const CAPTURE_INTERVAL = 1000 / CAPTURE_FPS;
+
+  function showError(msg) {
+    errorToast.textContent = msg;
+    errorToast.classList.add("show");
+    clearTimeout(showError._t);
+    showError._t = setTimeout(() => errorToast.classList.remove("show"), 4200);
+  }
+
+  function setStatus(text, mode) {
+    statusEl.textContent = text;
+    statusEl.className = "status" + (mode ? " " + mode : "");
+  }
+
+  function setDelay(sec) {
+    delaySeconds = sec;
+    [...delayChoices.children].forEach(b => {
+      b.classList.toggle("active", Number(b.dataset.delay) === sec);
+    });
+    delayBadge.textContent = sec + "秒 遅延";
+  }
+
+  delayChoices.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-delay]");
+    if (!btn) return;
+    setDelay(Number(btn.dataset.delay));
+  });
+
+  function clearBuffer() {
+    while (buffer.length) {
+      const f = buffer.shift();
+      if (f.bitmap && f.bitmap.close) f.bitmap.close();
+    }
+  }
+
+  async function startCamera() {
+    if (running) return;
+    startBtn.disabled = true;
+
+    const constraintsList = [
+      { video: { facingMode: { ideal: facingMode }, width: { ideal: 1280 }, height: { ideal: 720 } }, audio: false },
+      { video: { facingMode: facingMode }, audio: false },
+      { video: true, audio: false }
+    ];
+
+    let lastErr = null;
+    for (const c of constraintsList) {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia(c);
+        lastErr = null;
+        break;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+
+    if (!stream) {
+      startBtn.disabled = false;
+      const name = lastErr && lastErr.name;
+      if (name === "NotAllowedError") {
+        showError("カメラへのアクセスが許可されていません。端末の設定でカメラの権限を許可してください。");
+      } else if (name === "NotFoundError") {
+        showError("カメラが見つかりませんでした。");
+      } else {
+        showError("カメラを起動できませんでした: " + (lastErr ? lastErr.message : "unknown error"));
+      }
+      return;
+    }
+
+    video.srcObject = stream;
+    try {
+      await video.play();
+    } catch (e) {
+      // iOS Safari など、ユーザー操作直後なら通常成功する
+    }
+
+    await new Promise((resolve) => {
+      if (video.readyState >= 2) return resolve();
+      video.onloadedmetadata = () => resolve();
+    });
+
+    canvas.width = video.videoWidth || 1280;
+    canvas.height = video.videoHeight || 720;
+
+    running = true;
+    clearBuffer();
+    placeholder.classList.add("hidden");
+    delayBadge.classList.remove("hidden");
+    bufferBar.classList.remove("hidden");
+    setStatus("録画中 · " + delaySeconds + "秒遅延", "rec");
+
+    startBtn.style.display = "none";
+    startBtn.disabled = false;
+    stopBtn.style.display = "flex";
+    stopBtn.disabled = false;
+
+    captureTimer = setInterval(captureFrame, CAPTURE_INTERVAL);
+    rafId = requestAnimationFrame(renderLoop);
+  }
+
+  function stopCamera() {
+    if (!running) return;
+    running = false;
+
+    if (captureTimer) clearInterval(captureTimer);
+    if (rafId) cancelAnimationFrame(rafId);
+    captureTimer = null;
+    rafId = null;
+
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+      stream = null;
+    }
+    video.srcObject = null;
+
+    clearBuffer();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    placeholder.classList.remove("hidden");
+    delayBadge.classList.add("hidden");
+    bufferBar.classList.add("hidden");
+    setStatus("停止中");
+
+    stopBtn.style.display = "none";
+    startBtn.style.display = "flex";
+  }
+
+  async function captureFrame() {
+    if (!running || video.readyState < 2) return;
+    try {
+      const bitmap = await createImageBitmap(video);
+      buffer.push({ t: performance.now(), bitmap });
+
+      const maxAgeMs = (delaySeconds + 2) * 1000 + 3000; // 少し余裕を持って保持
+      const cutoff = performance.now() - maxAgeMs;
+      while (buffer.length && buffer[0].t < cutoff) {
+        const f = buffer.shift();
+        if (f.bitmap.close) f.bitmap.close();
+      }
+    } catch (e) {
+      // フレーム取得に失敗しても継続
+    }
+  }
+
+  function renderLoop() {
+    if (!running) return;
+
+    const now = performance.now();
+    const targetT = now - delaySeconds * 1000;
+
+    // buffer は時系列順。targetT 以前で最も新しいフレームを探す
+    let chosen = null;
+    for (let i = buffer.length - 1; i >= 0; i--) {
+      if (buffer[i].t <= targetT) { chosen = buffer[i]; break; }
+    }
+
+    if (chosen) {
+      ctx.drawImage(chosen.bitmap, 0, 0, canvas.width, canvas.height);
+    } else if (buffer.length === 0 && video.readyState >= 2) {
+      // バッファがまだ溜まっていない最初の数秒はライブ映像を表示
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    }
+
+    // バッファ充填インジケーター(最初の delaySeconds 秒のみ表示が動く)
+    const oldestAge = buffer.length ? (now - buffer[0].t) / 1000 : 0;
+    const fillRatio = Math.min(1, oldestAge / delaySeconds);
+    bufferFill.style.width = (fillRatio * 100).toFixed(1) + "%";
+
+    rafId = requestAnimationFrame(renderLoop);
+  }
+
+  startBtn.addEventListener("click", startCamera);
+  stopBtn.addEventListener("click", stopCamera);
+
+  flipBtn.addEventListener("click", async () => {
+    facingMode = facingMode === "user" ? "environment" : "user";
+    if (running) {
+      stopCamera();
+      await startCamera();
+    } else {
+      showError(facingMode === "user" ? "次回はインカメラで起動します。" : "次回はアウトカメラで起動します。");
+    }
+  });
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden && running) {
+      // バックグラウンドでは処理を止めてバッテリーを節約
+      if (captureTimer) clearInterval(captureTimer);
+      if (rafId) cancelAnimationFrame(rafId);
+    } else if (!document.hidden && running) {
+      captureTimer = setInterval(captureFrame, CAPTURE_INTERVAL);
+      rafId = requestAnimationFrame(renderLoop);
+    }
+  });
+
+  window.addEventListener("beforeunload", stopCamera);
+
+  if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
+    showError("このブラウザはカメラ機能に対応していません。");
+    startBtn.disabled = true;
+  }
+
+  setDelay(10);
+})();
+</script>
+</body>
+</html>
