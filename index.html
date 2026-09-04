@@ -376,6 +376,48 @@
     justify-content: center;
   }
 
+  .rakuten-ad-card{
+    background: #fff;
+    border: 1px solid #cfd3d4;
+    border-radius: 12px;
+    padding: 14px 12px 12px;
+    text-align: center;
+  }
+  .rakuten-ad-card__img{
+    width: 100%;
+    max-width: 190px;
+    height: auto;
+    border-radius: 6px;
+  }
+  .rakuten-ad-card__text{
+    font-size: 12.5px;
+    line-height: 1.5;
+    text-align: left;
+    color: #222;
+    margin: 10px 0 12px;
+  }
+  .rakuten-ad-card__text a{
+    color: #111;
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .rakuten-ad-card__date{ color: #999; }
+  .rakuten-ad-card__buy{
+    display: block;
+    background: #bf0000;
+    color: #fff;
+    font-size: 13.5px;
+    font-weight: 700;
+    line-height: 34px;
+    border-radius: 17px;
+    text-decoration: none;
+    margin-bottom: 10px;
+  }
+  .rakuten-ad-card__badge{
+    height: 18px;
+    width: auto;
+  }
+
   @media (min-width: 640px){
     main{ padding: 0 24px 24px; }
     .overlay-controls{ max-width: 480px; margin: 0 auto; width: 100%; left: 50%; right: auto; transform: translateX(-50%); }
@@ -437,9 +479,19 @@
   <div class="ad-popup">
     <button class="ad-popup__close" id="adPopupClose" aria-label="閉じる">×</button>
     <div class="ad-popup__badge">広告</div>
-    <h3>今なら<br>ゴルフクラブ全品20%OFF!</h3>
-    <p>人気ブランドのドライバー・アイアンをお得にゲット。練習の成果をコースで試そう。</p>
-    <a href="#" class="ad-popup__cta" target="_blank" rel="noopener">詳しく見る</a>
+    <div class="rakuten-ad-card">
+      <a href="https://hb.afl.rakuten.co.jp/ichiba/57227b18.240d25ef.57227b19.73a26d8f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftaylormadegolf%2Fky261%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">
+        <img src="https://hbb.afl.rakuten.co.jp/hgb/57227b18.240d25ef.57227b19.73a26d8f/?me_id=1322421&item_id=10045317&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Ftaylormadegolf%2Fcabinet%2Fshouhin%2F78%2Fky261_m.jpg%3F_ex%3D400x400&s=400x400&t=picttext" alt="テーラーメイド ゴルフ Qi10 ドライバー / Diamana Blue TM50" class="rakuten-ad-card__img">
+      </a>
+      <p class="rakuten-ad-card__text">
+        <a href="https://hb.afl.rakuten.co.jp/ichiba/57227b18.240d25ef.57227b19.73a26d8f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftaylormadegolf%2Fky261%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">テーラーメイド ゴルフ Qi10 ドライバー / Diamana Blue TM50</a><br>
+        価格：39,930円(税込、送料無料) <span class="rakuten-ad-card__date">(2026/9/4時点)</span>
+      </p>
+      <a href="https://hb.afl.rakuten.co.jp/ichiba/57227b18.240d25ef.57227b19.73a26d8f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftaylormadegolf%2Fky261%2F%3Fscid%3Daf_pc_bbtn&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ==" target="_blank" rel="nofollow sponsored noopener" class="rakuten-ad-card__buy">楽天で購入</a>
+      <a href="https://hb.afl.rakuten.co.jp/ichiba/57227b18.240d25ef.57227b19.73a26d8f/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Ftaylormadegolf%2Fky261%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiI0MDB4NDAwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D" target="_blank" rel="nofollow sponsored noopener">
+        <img src="https://static.affiliate.rakuten.co.jp/makelink/rl.svg" class="rakuten-ad-card__badge">
+      </a>
+    </div>
   </div>
 </div>
 
