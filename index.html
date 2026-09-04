@@ -282,6 +282,22 @@
     text-overflow: ellipsis;
   }
   .ad-banner__link:active{ opacity: 0.7; }
+  .ad-banner__img-link{
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-width: 0;
+  }
+  .ad-banner__img{
+    max-height: 34px;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 4px;
+  }
   .ad-banner__close{
     flex-shrink: 0;
     width: 20px;
@@ -428,7 +444,9 @@
 
 <div class="ad-banner ad-banner--top" id="adBannerTop">
   <span class="ad-banner__label">広告</span>
-  <a class="ad-banner__link" href="#" target="_blank" rel="noopener">ゴルフ用品ストア - 会員登録で今なら10%OFF</a>
+  <a class="ad-banner__img-link" href="https://hb.afl.rakuten.co.jp/hsc/5722ff03.fedcc2f4.5722ff04.b725ce1f/?link_type=pict&ut=eyJwYWdlIjoic2hvcCIsInR5cGUiOiJwaWN0IiwiY29sIjoxLCJjYXQiOiI0NCIsImJhbiI6Mjc5NDg1OCwiYW1wIjpmYWxzZX0%3D" target="_blank" rel="nofollow sponsored noopener">
+    <img src="https://hbb.afl.rakuten.co.jp/hsb/5722ff03.fedcc2f4.5722ff04.b725ce1f/?me_id=1&me_adv_id=2794858&t=pict" alt="" class="ad-banner__img">
+  </a>
   <button class="ad-banner__close" id="adBannerTopClose" aria-label="広告を閉じる">×</button>
 </div>
 
