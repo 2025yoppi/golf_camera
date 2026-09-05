@@ -191,6 +191,22 @@
     color: #fff;
   }
 
+  .btn-stop-inline{
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 0 14px;
+    height: 40px;
+    border: none;
+    border-radius: 12px;
+    background: var(--danger);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .btn-stop-inline:active{ transform: scale(0.97); }
+
   .controls{
     display: flex;
     gap: 10px;
@@ -472,6 +488,10 @@
           <button data-delay="5">5秒</button>
           <button data-delay="10" class="active">10秒</button>
         </div>
+        <button class="btn-stop-inline" id="stopBtn" disabled style="display:none;">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
+          停止
+        </button>
       </div>
 
       <div class="controls">
@@ -484,10 +504,6 @@
             <circle cx="12" cy="13" r="3.6"/>
           </svg>
           早速スイングチェック！
-        </button>
-        <button class="btn btn-stop" id="stopBtn" disabled style="display:none;">
-          <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
-          停止
         </button>
       </div>
     </div>
