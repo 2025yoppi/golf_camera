@@ -150,6 +150,12 @@
     transition: width 0.1s linear;
   }
 
+  .delay-label{
+    font-size: 11px;
+    color: var(--ink-dim);
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    margin-bottom: 6px;
+  }
   .delay-row{
     display: flex;
     align-items: center;
@@ -228,10 +234,10 @@
     overflow: hidden;
   }
   .btn-action span{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .btn-action svg{ flex-shrink: 0; }
+  .btn-action svg{ flex-shrink: 0; width: 16px; height: 16px; }
   .btn-action:active{ transform: scale(0.97); }
   .btn-action--start{ background: var(--turf); flex: 1.6; }
-  .btn-action--stop{ background: var(--danger); flex: 0 0 auto; }
+  .btn-action--stop{ background: var(--danger); flex: 1.6; }
   .btn-action[disabled]{ opacity: 0.4; pointer-events: none; }
 
   .error-toast{
@@ -472,6 +478,7 @@
     <div class="overlay-controls">
       <div class="buffer-bar hidden" id="bufferBar"><i id="bufferFill"></i></div>
 
+      <div class="delay-label">遅延時間</div>
       <div class="delay-row">
         <div class="delay-choices" id="delayChoices">
           <button data-delay="5">5秒</button>
@@ -485,7 +492,7 @@
             <path d="M4 8a2 2 0 0 1 2-2h1.2a1 1 0 0 0 .87-.5l.6-1a1 1 0 0 1 .87-.5h4.92a1 1 0 0 1 .87.5l.6 1a1 1 0 0 0 .87.5H18a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8Z"/>
             <circle cx="12" cy="13" r="3.6"/>
           </svg>
-          <span>早速スイングチェック！</span>
+          <span>スイングチェック！</span>
         </button>
         <button class="btn-action btn-action--stop" id="stopBtn" disabled style="display:none;">
           <svg viewBox="0 0 24 24" fill="currentColor" width="13" height="13"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
