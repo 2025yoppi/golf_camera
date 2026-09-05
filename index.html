@@ -69,15 +69,11 @@
     object-position: center top;
     display: block;
     opacity: 0;
-    filter: blur(18px);
-    transform: scale(1.06);
-    transition: opacity 1.6s ease, filter 1.6s ease, transform 1.6s ease;
-    will-change: opacity, filter;
+    transition: opacity 1.6s ease;
+    will-change: opacity;
   }
   .bg-slide.is-active{
     opacity: 1;
-    filter: blur(0);
-    transform: scale(1);
   }
   .bg-scrim{
     position: fixed;
