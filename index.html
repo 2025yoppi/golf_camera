@@ -57,7 +57,7 @@
   .bg-slider{
     position: fixed;
     inset: 0;
-    z-index: -2;
+    z-index: 0;
     display: flex;
     width: 200%;
     height: 100%;
@@ -75,7 +75,7 @@
   .bg-scrim{
     position: fixed;
     inset: 0;
-    z-index: -1;
+    z-index: 0;
     pointer-events: none;
     background: linear-gradient(180deg, rgba(5,8,11,0.15) 0%, rgba(5,8,11,0.08) 40%, rgba(5,8,11,0.1) 70%, rgba(5,8,11,0.3) 100%);
   }
@@ -91,6 +91,16 @@
   @keyframes pulse{
     0%, 100% { opacity: 1; }
     50% { opacity: 0.25; }
+  }
+
+  .app-shell{
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    width: 100%;
   }
 
   main{
@@ -483,6 +493,7 @@
 </div>
 <div class="bg-scrim"></div>
 
+<div class="app-shell">
 <div class="ad-banner ad-banner--top" id="adBannerTop">
   <span class="ad-banner__label">広告</span>
   <a class="ad-banner__img-link" href="https://hb.afl.rakuten.co.jp/hsc/5722ff03.fedcc2f4.5722ff04.b725ce1f/?link_type=pict&ut=eyJwYWdlIjoic2hvcCIsInR5cGUiOiJwaWN0IiwiY29sIjoxLCJjYXQiOiI0NCIsImJhbiI6Mjc5NDg1OCwiYW1wIjpmYWxzZX0%3D" target="_blank" rel="nofollow sponsored noopener">
@@ -553,6 +564,7 @@
 
 <div class="error-toast" id="errorToast"></div>
 
+</div>
 <script>
 (() => {
   "use strict";
