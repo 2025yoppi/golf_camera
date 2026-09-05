@@ -541,6 +541,15 @@
   const ctx = canvas.getContext("2d", { alpha: false });
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = "high";
+
+  // メモリ節約用: バッファに溜めるフレームは縮小して保持する(表示解像度とは別)
+  const BUFFER_W = 480;
+  const BUFFER_H = 270;
+  const bufCanvas = document.createElement("canvas");
+  bufCanvas.width = BUFFER_W;
+  bufCanvas.height = BUFFER_H;
+  const bufCtx = bufCanvas.getContext("2d", { alpha: false });
+
   const placeholder = $("placeholder");
   const delayBadge = $("delayBadge");
   const bufferBar = $("bufferBar");
@@ -699,7 +708,9 @@
   async function captureFrame() {
     if (!running || video.readyState < 2) return;
     try {
-      const bitmap = await createImageBitmap(video);
+      // 表示映像はそのままに、バッファ保持用だけ縮小してメモリを節約する
+      bufCtx.drawImage(video, 0, 0, BUFFER_W, BUFFER_H);
+      const bitmap = await createImageBitmap(bufCanvas);
       buffer.push({ t: performance.now(), bitmap });
 
       const maxAgeMs = (delaySeconds + 1) * 1000 + 1500; // 少し余裕を持って保持
