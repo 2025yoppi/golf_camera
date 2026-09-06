@@ -42,18 +42,15 @@
 
   html{
     height: 100%;
-    overflow: hidden;
     background: var(--bg);
   }
 
   body{
-    height: 100vh;
-    height: 100dvh;
+    height: 100%;
     margin: 0;
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", Roboto, sans-serif;
     overscroll-behavior: none;
-    overflow: hidden;
     background-color: var(--bg);
   }
 
@@ -89,6 +86,7 @@
   body{
     display: flex;
     flex-direction: column;
+    min-height: 100svh;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
@@ -213,18 +211,20 @@
   .delay-choices button{
     appearance: none;
     border: none;
-    background: var(--bg-raised);
+    background: transparent;
     color: var(--ink-dim);
     font-size: 14px;
     font-weight: 600;
     padding: 9px 0;
     border-radius: 12px;
     font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.6);
     transition: background 0.15s, color 0.15s;
   }
   .delay-choices button.active{
     background: #fff;
     color: var(--turf);
+    text-shadow: none;
   }
 
   button{ font-family: inherit; cursor: pointer; }
