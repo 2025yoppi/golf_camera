@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://golfswing-camera.com/sitemap.xml
