@@ -131,6 +131,8 @@
     display: block;
   }
 
+  .stage canvas.hidden{ display: none; }
+
   .placeholder{
     position: absolute;
     inset: 0;
@@ -183,8 +185,9 @@
   }
 
   .delay-label{
-    font-size: 11px;
-    color: var(--ink-dim);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
     text-shadow: 0 1px 6px rgba(0,0,0,0.6);
     margin-bottom: 6px;
   }
@@ -507,7 +510,7 @@
 
 <main>
   <div class="stage" id="stage">
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas" class="hidden"></canvas>
     <div class="placeholder" id="placeholder"></div>
     <div class="delay-badge hidden" id="delayBadge">10秒 遅延</div>
 
@@ -760,6 +763,7 @@
     running = true;
     clearBuffer();
     placeholder.classList.add("hidden");
+    canvas.classList.remove("hidden");
     delayBadge.classList.remove("hidden");
     bufferBar.classList.remove("hidden");
     setStatus("録画中 · " + delaySeconds + "秒遅延", "rec");
@@ -793,6 +797,7 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     placeholder.classList.remove("hidden");
+    canvas.classList.add("hidden");
     delayBadge.classList.add("hidden");
     bufferBar.classList.add("hidden");
     setStatus("停止中");
