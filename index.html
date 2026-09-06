@@ -281,10 +281,15 @@
     font-size: 13px;
     line-height: 1.5;
     transform: translateY(140%);
-    transition: transform 0.25s ease;
+    visibility: hidden;
+    transition: transform 0.25s ease, visibility 0s linear 0.25s;
     z-index: 20;
   }
-  .error-toast.show{ transform: translateY(0); }
+  .error-toast.show{
+    transform: translateY(0);
+    visibility: visible;
+    transition: transform 0.25s ease, visibility 0s linear;
+  }
 
   /* --- Ad slots --- */
   .ad-banner{
