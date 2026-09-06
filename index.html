@@ -42,15 +42,18 @@
 
   html{
     height: 100%;
+    overflow: hidden;
     background: var(--bg);
   }
 
   body{
-    height: 100%;
+    height: 100vh;
+    height: 100dvh;
     margin: 0;
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic UI", "Segoe UI", Roboto, sans-serif;
     overscroll-behavior: none;
+    overflow: hidden;
     background-color: var(--bg);
   }
 
@@ -86,7 +89,6 @@
   body{
     display: flex;
     flex-direction: column;
-    min-height: 100dvh;
     padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
   }
 
@@ -165,7 +167,6 @@
     flex-direction: column;
     gap: 12px;
     padding: 28px 10px calc(14px + env(safe-area-inset-bottom));
-    background: linear-gradient(to top, rgba(5,8,11,0.82) 0%, rgba(5,8,11,0.68) 42%, rgba(5,8,11,0) 100%);
   }
 
   .buffer-bar{
@@ -208,22 +209,16 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 8px;
-    background: rgba(15, 20, 15, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(237,234,224,0.14);
-    border-radius: 12px;
-    padding: 4px;
   }
   .delay-choices button{
     appearance: none;
     border: none;
-    background: transparent;
+    background: var(--bg-raised);
     color: var(--ink-dim);
     font-size: 14px;
     font-weight: 600;
     padding: 9px 0;
-    border-radius: 9px;
+    border-radius: 12px;
     font-variant-numeric: tabular-nums;
     transition: background 0.15s, color 0.15s;
   }
