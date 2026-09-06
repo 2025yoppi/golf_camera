@@ -188,6 +188,7 @@
     font-weight: 700;
     color: var(--ink);
     text-shadow: 0 1px 6px rgba(0,0,0,0.6);
+    margin-top: 10px;
     margin-bottom: 6px;
   }
   .delay-row{
@@ -605,7 +606,10 @@
     }
   }
   document.addEventListener("click", (e) => {
-    if (e.target.closest("button")) playClickSound();
+    const btn = e.target.closest("button");
+    if (btn && !btn.classList.contains("ad-banner__close") && !btn.classList.contains("ad-popup__close")) {
+      playClickSound();
+    }
   }, true);
 
   const stage = $("stage");
