@@ -15,15 +15,6 @@ export default {
       }
     }
 
-    // プライバシーポリシーページ("/privacy")も同様に国で出し分ける
-    if (url.pathname === "/privacy") {
-      const country = request.cf ? request.cf.country : null;
-      const target = country && country !== "JP" ? "/privacy-intl.html" : "/privacy.html";
-      const policyRequest = new Request(new URL(target, url), request);
-      const res = await env.ASSETS.fetch(policyRequest);
-      return new Response(res.body, res);
-    }
-
     return env.ASSETS.fetch(request);
   }
 };
