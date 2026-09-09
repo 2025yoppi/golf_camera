@@ -16,12 +16,16 @@ export default {
     }
 
     // プライバシーポリシーページ("/privacy")も同様に国で出し分ける
+    // 日本(デフォルト)の場合は何もせず、下のフォールスルーで自然に privacy.html を解決させる
+    // (ここで /privacy.html を明示fetchすると、拡張子なしURLへの正規化と衝突して無限リダイレクトになるため)
     if (url.pathname === "/privacy") {
       const country = request.cf ? request.cf.country : null;
-      const target = country && country !== "JP" ? "/privacy-intl.html" : "/privacy.html";
-      const policyRequest = new Request(new URL(target, url), request);
-      const res = await env.ASSETS.fetch(policyRequest);
-      return new Response(res.body, res);
+
+      if (country && country !== "JP") {
+        const intlRequest = new Request(new URL("/privacy-intl.html", url), request);
+        const res = await env.ASSETS.fetch(intlRequest);
+        return new Response(res.body, res);
+      }
     }
 
     return env.ASSETS.fetch(request);
