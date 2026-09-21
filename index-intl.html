@@ -338,6 +338,39 @@
     align-items: center;
     overflow: hidden;
   }
+
+  .site-content{
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 28px 20px 40px;
+    color: var(--ink-dim);
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .site-content h2{
+    color: var(--ink);
+    font-size: 17px;
+    margin: 32px 0 12px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .site-content h2:first-of-type{
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+  .site-content h3{
+    color: var(--ink);
+    font-size: 14.5px;
+    margin: 18px 0 6px;
+  }
+  .site-content ol,
+  .site-content ul{
+    padding-left: 1.3em;
+    margin: 8px 0;
+  }
+  .site-content li{ margin-bottom: 4px; }
+  .site-content p{ margin: 0 0 10px; }
   .ad-banner--bottom{ margin: 0 10px 8px; }
   .ad-banner__label{
     flex-shrink: 0;
@@ -660,6 +693,39 @@
 <div class="error-toast" id="errorToast"></div>
 
 </div>
+
+<div class="site-content">
+  <h2>How to Use</h2>
+  <ol>
+    <li>Mount your phone on a tripod (or similar) so it can see your full swing</li>
+    <li>Choose a delay of 10 or 15 seconds</li>
+    <li>Tap "Check Swing!" to start, then take your swing as normal</li>
+    <li>After the delay, your swing plays back automatically on screen so you can check your form right away</li>
+  </ol>
+  <p>The front (selfie) camera is also supported, so you can check your swing from a face-on angle too.</p>
+
+  <h2>Why a Delay Camera Helps Your Golf Swing</h2>
+  <p>
+    Watching your own swing is one of the fastest ways to improve your form, but normal video recording means stopping to rewind a clip, or asking someone else to film you.
+  </p>
+  <p>
+    This tool uses a "timeshift" playback: your camera feed is delayed by a few seconds and replayed automatically on the same screen. Take your swing, wait a moment, and watch it happen on the same screen — no rewinding, no extra device, no interruption to your practice rhythm.
+  </p>
+  <p>
+    Everything happens locally on your device. Nothing is uploaded to a server or saved anywhere, so you can use it freely at the range or in your backyard without worrying about your footage.
+  </p>
+
+  <h2>FAQ</h2>
+  <h3>Is my video saved anywhere?</h3>
+  <p>No. Video is processed temporarily on your device only — nothing is uploaded or stored, and it's cleared when you close the page.</p>
+  <h3>Do I need to install an app?</h3>
+  <p>No installation needed. It runs entirely in your browser — just open this page and you're ready to go.</p>
+  <h3>What devices and browsers are supported?</h3>
+  <p>Any smartphone or tablet with a camera, using a modern browser such as Safari or Chrome.</p>
+  <h3>Is it free?</h3>
+  <p>Yes, this tool is completely free to use.</p>
+</div>
+
 <script>
 (() => {
   "use strict";
