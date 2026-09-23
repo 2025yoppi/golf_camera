@@ -28,6 +28,17 @@ export default {
       }
     }
 
+    // 使い方ガイドページ("/guide")も同様に国で出し分ける(privacyと同じ安全なパターン)
+    if (url.pathname === "/guide") {
+      const country = request.cf ? request.cf.country : null;
+
+      if (country && country !== "JP") {
+        const intlRequest = new Request(new URL("/guide-intl.html", url), request);
+        const res = await env.ASSETS.fetch(intlRequest);
+        return new Response(res.body, res);
+      }
+    }
+
     return env.ASSETS.fetch(request);
   }
 };
